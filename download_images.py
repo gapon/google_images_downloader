@@ -33,3 +33,25 @@ for url in rows:
 	# handle if any exceptions are thrown during the download process
 	except:
 		print("[INFO] error downloading {}...skipping".format(p))
+
+
+# Check if image is valid
+for imagePath in paths.list_images(args["output"]):
+	# initialize if the image should be deleted or not
+	delete = False
+	# try to load the image
+	try:
+		image = cv2.imread(imagePath)
+		# if the image is `None` then we could not properly load it
+		# from disk, so delete it
+		if image is None:
+			delete = True
+	# if OpenCV cannot load the image then the image is likely
+	# corrupt so we should delete it
+	except:
+		print("Except")
+		delete = True
+	# check to see if the image should be deleted
+	if delete:
+		print("[INFO] deleting {}".format(imagePath))
+		os.remove(imagePath)
